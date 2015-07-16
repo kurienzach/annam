@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateDishToReccuringDayTable extends Migration {
+class CreateDishDatesTable extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -12,12 +12,12 @@ class CreateDishToReccuringDayTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('dish_to_reccuring_day', function(Blueprint $table)
+		Schema::create('dish_dates', function(Blueprint $table)
 		{
 			$table->integer('dish_id')->unsigned();
-            $table->tinyInteger('day');
+            $table->date('available_date');
 
-            $table->primary(['dish_id', 'day']);
+            $table->primary(['dish_id', 'available_date']);
 
             $table->foreign('dish_id')
                   ->references('id')->on('dishes')
@@ -32,7 +32,7 @@ class CreateDishToReccuringDayTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('dish_to_reccuring_day');
+		Schema::drop('dish_dates');
 	}
 
 }

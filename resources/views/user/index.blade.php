@@ -1,5 +1,11 @@
 @extends('user.base')
 
+@section('head')
+@parent
+    <link rel="stylesheet" href="css/awesomplete.css" />
+    <script src="js/awesomplete.min.js" async></script>
+@stop
+
 @section('content')
     <div class="hero bg-image overlay" data-stellar-background-ratio="0.2" data-image-src="images/annam.jpg">
         <div class="container valign">
@@ -11,7 +17,7 @@
                         <fieldset>
                             <div class="search">
                                 <span><i class="fa fa-map-marker map-location"></i></span>
-                                <input class="form-control input-lg input-sz" name="name" type="text" id="name" size="5" value="" placeholder="enter your location">
+                                <input class="form-control input-lg input-sz location" name="location" type="text" id="location" size="5" value="" placeholder="enter your location">
                                 <button type="submit" class="btn btn-dark btn-fill btn-lg" id="submit" value="Submit">view menu</button>
                             </div>
                         </fieldset>
@@ -78,11 +84,24 @@
                 <fieldset>
                     <div class="search">
                         <span><i class="fa fa-map-marker map-location"></i></span>
-                        <input class="form-control input-lg input-sz" name="name" type="text" id="name" size="5" value="" placeholder="enter your location">
+                        <input class="form-control input-lg input-sz location" name="location" type="text" id="location1" size="5" value="" placeholder="enter your location">
                         <button type="submit" class="btn btn-dark btn-fill btn-lg" id="submit" value="Submit">view menu</button>
                     </div>
                 </fieldset>
             </form>
         </div>
     </div>
+@stop
+
+@section('scripts')
+@parent
+
+<script>
+    $(document).ready(function() {
+        var input = document.getElementById("location");
+        new Awesomplete(input, {
+            list: ["Ada", "Java", "JavaScript", "Brainfuck", "LOLCODE", "Node.js", "Ruby on Rails"]
+        });    
+    });
+</script>
 @stop

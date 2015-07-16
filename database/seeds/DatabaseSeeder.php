@@ -16,6 +16,9 @@ class DatabaseSeeder extends Seeder {
 
         $this->call('DishCategoriesTableSeeder');
         $this->call('DishesTableSeeder');
+        $this->call('DishToCategoriesTableSeeder');
+        $this->call('DishDatesTableSeeder');
+        $this->call('DishReccuringDaysTableSeeder');
 	}
 
 }
