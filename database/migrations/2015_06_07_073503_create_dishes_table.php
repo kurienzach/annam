@@ -17,6 +17,7 @@ class CreateDishesTable extends Migration {
 			$table->increments('id');
             $table->string('name');
             $table->text('description');
+            $table->text('img_url');
             $table->decimal('price', 5, 2);
             $table->boolean('featured');
             $table->boolean('nonveg');
