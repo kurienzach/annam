@@ -17,6 +17,8 @@ Route::get('/', [
 
 Route::get('home', 'HomeController@index');
 Route::get('menu', 'PagesController@menu');
+Route::post('cart', 'PagesController@cart');
+Route::get('cart', 'PagesController@cart1');
 
 Route::controllers([
 	'auth' => 'Auth\AuthController',

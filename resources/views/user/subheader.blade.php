@@ -4,24 +4,24 @@
 <div class="row vertical-align">
     <div class="col-md-4">
     <div class="wrapper-demo">
-    <div id="dd" class="wrapper-dropdown-2" tabindex="1">Today's Menu – {{ Carbon::now()->format('M dS') }}
+    <div id="dd" class="wrapper-dropdown-2 date-dropdown" tabindex="1">Today's Menu – {{ Carbon::now('Asia/Kolkata')->format('M dS') }}
         <ul class="dropdown">
             <li>
                 <a href="#">
                     <div class="day">Today's Menu</div>
-                    <div class="date">{{ Carbon::now()->format('M dS') }}</div>
+                    <div class="date">{{ Carbon::now('Asia/Kolkata')->format('M dS') }}</div>
                 </a>
             </li>
             <li>
                 <a href="#">
                     <div class="day">Tomorrow's Menu</div>
-                    <div class="date">{{ Carbon::now()->addDay()->format('M dS') }}</div>
+                    <div class="date">{{ Carbon::now('Asia/Kolkata')->addDay()->format('M dS') }}</div>
                 </a>
             </li>
             <li>
                 <a href="#">
-                    <div class="day">{{ Carbon::now()->addDays(2)->format('l') }}'s Menu</div>
-                    <div class="date">{{ Carbon::now()->addDays(2)->format('M dS') }}</div>
+                    <div class="day">{{ Carbon::now('Asia/Kolkata')->addDays(2)->format('l') }}'s Menu</div>
+                    <div class="date">{{ Carbon::now('Asia/Kolkata')->addDays(2)->format('M dS') }}</div>
                 </a>
             </li>
         </ul>

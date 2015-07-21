@@ -10,12 +10,13 @@ return i.stellar.apply(i,Array.prototype.slice.call(arguments,0))},t[r].scrollPr
 
 //plugin bootstrap minus and plus
 //http://jsfiddle.net/laelitenetwork/puJ6G/
+function init_cart_add() {
 $('.btn-number').click(function(e){
     e.preventDefault();
     
     fieldName = $(this).attr('data-field');
     type      = $(this).attr('data-type');
-    var input = $("input[name='"+fieldName+"']");
+    var input = $(this).parent().parent().find("input[name='"+fieldName+"']");
     var currentVal = parseInt(input.val());
     if (!isNaN(currentVal)) {
         if(type == 'minus') {
@@ -64,6 +65,19 @@ $('.input-number').change(function() {
         $(this).val($(this).data('oldValue'));
     }
     
+
+    // Logic to add to cart
+    if(valueCurrent >= minValue && valueCurrent <= maxValue) {
+        if (valueCurrent == 0) {
+            // remove product from cart if already added
+            remove_from_cart($(this).closest('.iconBox').find('.dish-id').text(), $(this).val());
+        }
+        else {
+            // add product to cart
+            add_to_cart($(this).closest('.iconBox').find('.dish-id').text(), $(this).val());
+        }
+        $('.add-cart').text(cart.length);
+    }
     
 });
 $(".input-number").keydown(function (e) {
@@ -81,5 +95,5 @@ $(".input-number").keydown(function (e) {
             e.preventDefault();
         }
     });
-	
+}
 	

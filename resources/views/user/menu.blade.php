@@ -1,5 +1,5 @@
 @extends('user.base')
-
+<?php use Carbon\Carbon; ?>
 @section('content')
 <div class="inner-page-wrap">
     @include ('user.subheader')
@@ -16,8 +16,13 @@
               <a href="#" class="cbp-l-loadMore-button-link">Tomorrow's Menu 15 / 05 / 2015</a>
             </div>
         </div>
-  </div>
-</section>
+        </div>
+    </section>
+
+    <form method="post" action="{{ url('cart') }}">
+        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+        <input type="hidden" id="cart" name="cart" value="123">
+    </form>
 </div>
 @stop
 
@@ -26,6 +31,7 @@
     <script type="text/template" id="menu_item_template">
         <div class="col-sm-4">
         <div class="iconBox">
+            <span style="display:none" class="dish-id"><%= dish["id"] %></span>
             <a href="#" class="thumbnail">
                 <img src="{{ asset('images') }}<%= "/" + dish["img_url"] %>" alt="...">
             </a>
@@ -60,10 +66,11 @@
         </div>
         </div>
     </script>
- 
-    <script src="{{ asset('js/lodash.js') }}"></script>
+    
     <script type="text/javascript">
         var dishes = {!! $dishes !!};
+        var current_hour = {{ Carbon::now('Asia/Kolkata')->format('h') }};
+        var cart = [];
 
         function DropDown(el) {
             this.dd = el;
@@ -87,6 +94,11 @@
             $(document).click(function() {
                 // all dropdowns
                 $('.wrapper-dropdown-2').removeClass('active');
+            });
+
+            $('ul.dropdown li a').click(function() {
+                $(".date-dropdown")[0].childNodes[0].nodeValue = $(this).find('.day').html() + "-" + $(this).find('.date').html();
+
             });
 
         });

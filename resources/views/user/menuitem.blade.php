@@ -1,5 +1,6 @@
 <div class="col-sm-4">
 <div class="iconBox">
+    <span style="display:none" class="dish-id">{{ $dish->id }}</span>
     <a href="#" class="thumbnail">
         <img src="{{ asset('images/') ."/" . $dish->img_url }}" alt="...">
     </a>

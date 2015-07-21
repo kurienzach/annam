@@ -25,7 +25,7 @@
                             <a href="login-registration.html">Login/Register</a>
                         </li>
                         <li class="cart-menu">
-                            <a href="cart.html"><span class="add-cart">3</span><img src="images/cart.png"></a>
+                            <a href="#" class="cart-display"><span class="add-cart">0</span><img src="images/cart.png"></a>
                         </li>
                     </ul>
                 </div>

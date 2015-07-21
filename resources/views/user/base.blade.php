@@ -55,6 +55,7 @@
         <script src="{{ asset('js/plugins.js') }}"></script>
         <script src="{{ asset('js/lightbox.js') }}"></script>
         <script src="{{ asset('js/blockets.js') }}"></script>
+        <script src="{{ asset('js/lodash.js') }}"></script>
         <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
         <script src="{{ asset('js/ie10-viewport-bug-workaround.js') }}"></script>
         @show

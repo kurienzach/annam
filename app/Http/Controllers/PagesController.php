@@ -21,7 +21,11 @@ class PagesController extends Controller {
     public function menu()
     {
         $dishes_db = Dish::all();
+
+        // Find dishes available only for the specific day
+
         $dishes = collect();
+
         foreach ($dishes_db as $dish) 
         {
             $dish_item = collect();
@@ -43,4 +47,14 @@ class PagesController extends Controller {
 
         return view('user.menu', ["dishes" => $dishes]);
     }
+
+    public function cart(Request $request) {
+        $request->session()->put('cart', json_decode($request->get('cart')));
+        return view('user.cart', ["cart" => json_encode($request->session()->get('cart', '[]'))]);
+    }
+
+    public function cart1(Request $request) {
+        return "hello";
+    }
+
 }
