@@ -22,7 +22,11 @@
                             <a href="#">How it Works</a>
                         </li>
                         <li>
-                            <a href="{{ url('login') }}">Login/Register</a>
+                            @if (Auth::check())
+                                <a href="">Hi {{ Auth::user()->email }}</a>
+                            @else
+                                <a href="{{ url('login') }}">Login/Register</a>
+                            @endif
                         </li>
                         <li class="cart-menu">
                             <a href="cart" class="cart-display"><span class="add-cart">0</span><img src="images/cart.png"></a>

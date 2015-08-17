@@ -18,13 +18,14 @@ Route::get('/', [
 Route::get('home', 'HomeController@index');
 
 Route::get('login', 'PagesController@login');
+Route::post('login', 'PagesController@authuser');
 Route::post('menu', 'PagesController@postMenu');
 Route::get('menu', 'PagesController@menu');
 Route::get('cart', 'PagesController@cart');
 Route::put('updatecart', 'PagesController@updatecart');
 Route::put('updatelocation', 'PagesController@updatelocation');
 
-Route::get('placeorder', 'PagesController@placeorder');
+Route::get('placeorder', ['middleware' => 'auth', 'uses' => 'PagesController@placeorder' ]);
 
 Route::controllers([
 	'auth' => 'Auth\AuthController',

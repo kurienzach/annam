@@ -4,6 +4,9 @@
 <div class="inner-page-wrap">
     @include ('user.subheader')
 
+    <div class="alert-box">
+    </div>
+
     <section class="space-lg bg-light" id="1">
         <div class="container">
             <div class="row text-center-sm">

@@ -2809,3 +2809,11 @@ position:absolute; z-index:-1000; left:-1000px; overflow: hidden; clip: rect(0 0
 .modal-content .autocomplete-suggestions strong{
     color: #fff;
 }
+
+.alert-box {
+    position: absolute;
+    top: 185px;
+    right: 35px;
+    width: 250px;
+    z-index: 200;
+}

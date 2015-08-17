@@ -109,19 +109,43 @@ function get_dish(id) {
 // Cart functions
 function add_to_cart(item, qty) {
     var index = search_in_cart(item);
+    var dish;
+    var isAdded = "added to";
     if (index == -1) {
         dish = get_dish(item);
         cart.push({"id": item, "name": dish['name'], "price": dish['price'],"qty": qty});
+
+        // Show popup notification
+        $alert = $('<div class="alert alert-success" style="display:none">' + dish['name'] + ' added to your cart</div>');
+        $('.alert-box').append($alert);
+        $alert.fadeIn();
+        setInterval(function() {
+            $alert.slideUp(); 
+        }, 2000);
     }
     else {
+        if (cart[index]["qty"] < qty)
+            isAdded = "removed from";
         cart[index]["qty"] = qty;
+        dish = cart[index];
     }
+
 }
 
 function remove_from_cart(item) {
     var index = search_in_cart(item);
-    if (index != -1)
+    if (index != -1) {
+
+        // Show popup notification
+        $alert = $('<div class="alert alert-success" style="display:none">' + cart[index]['name'] + ' removed from  your cart</div>');
+        $('.alert-box').append($alert);
+        $alert.fadeIn();
+        setInterval(function() {
+            $alert.slideUp(); 
+        }, 2000);
+
         cart.splice(index, 1);
+    }
 }
 
 function search_in_cart(item) {

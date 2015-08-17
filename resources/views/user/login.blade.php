@@ -5,6 +5,9 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-12 col-md-offset-0 signup-view text-center">
+                    @if (count($errors) > 0)
+                       <div class="alert alert-danger" role="alert">{{ $errors->first('msg') }}</div>
+                    @endif
                     <div class="col-md-6">
                         <div class="signup-message">
                             <div class="col-md-12">
@@ -37,13 +40,14 @@
                         <div class="signup-message">
                             <div class="col-md-12">
                                 <h4 class="text-left login-page">Sign in</h4>
-                                <form action="#" method="post" id="request-quote-form">
+                                <form action="login" method="post" id="request-quote-form">
+                                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
                                     <fieldset class="row">
                                         <div class="form-group col-md-12 has-icon-right">
-                                            <input type="email" name="email" id="email" placeholder="Email Id" class="form-control">
+                                            <input type="email" name="email" id="email" placeholder="Email Id" class="form-control" required>
                                         </div>
                                         <div class="form-group col-md-12 has-icon-right">
-                                            <input type="password" name="password" id="password" placeholder="Password" class="form-control">
+                                            <input type="password" name="password" id="password" placeholder="Password" class="form-control" required>
                                         </div>
                                     </fieldset>
                                     <footer>

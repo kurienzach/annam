@@ -1,5 +1,6 @@
 <?php namespace App\Http\Controllers;
 
+use Auth;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
@@ -13,6 +14,17 @@ class PagesController extends Controller {
         return view('user.login', [
             "cart" => json_encode($request->session()->get('cart', array()))
         ]);
+    }
+
+    public function authuser(Request $request) 
+    {
+        if (Auth::attempt([
+            'email' => $request->get('email'),
+            'password' => $request->get('password')
+        ])) {
+            return redirect()->intended('/'); 
+        }
+        return redirect()->back()->withInput()->withErrors(['msg' => 'Invalid Usersname / Password']);
     }
 
 	/**
