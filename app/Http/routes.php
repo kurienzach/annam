@@ -16,9 +16,15 @@ Route::get('/', [
 ]);
 
 Route::get('home', 'HomeController@index');
+
+Route::get('login', 'PagesController@login');
+Route::post('menu', 'PagesController@postMenu');
 Route::get('menu', 'PagesController@menu');
-Route::post('cart', 'PagesController@cart');
-Route::get('cart', 'PagesController@cart1');
+Route::get('cart', 'PagesController@cart');
+Route::put('updatecart', 'PagesController@updatecart');
+Route::put('updatelocation', 'PagesController@updatelocation');
+
+Route::get('placeorder', 'PagesController@placeorder');
 
 Route::controllers([
 	'auth' => 'Auth\AuthController',

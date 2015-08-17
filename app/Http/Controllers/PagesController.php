@@ -8,18 +8,37 @@ use App\Dish;
 use Illuminate\Http\Request;
 
 class PagesController extends Controller {
+    public function login(Request $request)
+    {
+        return view('user.login', [
+            "cart" => json_encode($request->session()->get('cart', array()))
+        ]);
+    }
 
 	/**
      * Main Page View
      */
 
-    public function index()
+    public function index(Request $request)
     {
-        return view('user.index');
+        return view('user.index', [
+            "cart" => json_encode($request->session()->get('cart', array()))
+        ]);
     }
 
-    public function menu()
+    public function postMenu(Request $request)
     {
+        $request->session()->put('location', $request->get('location'));
+        return redirect('menu');
+    }
+
+    public function menu(Request $request)
+    {
+        // Location has to be set before the user can view the menu
+        if (!$request->session()->has('location')) {
+            return redirect('/'); 
+        }
+
         $dishes_db = Dish::all();
 
         // Find dishes available only for the specific day
@@ -45,16 +64,28 @@ class PagesController extends Controller {
             $dishes->push($dish_item);
         }
 
-        return view('user.menu', ["dishes" => $dishes]);
+        return view('user.menu', [
+            "dishes" => $dishes, 
+            "cart" => json_encode($request->session()->get('cart', array())),
+            "location" => $request->session()->get('location')
+        ]);
     }
 
     public function cart(Request $request) {
+        return view('user.cart', ["cart" => json_encode($request->session()->get('cart', array()))]);
+    }
+
+    public function updatecart(Request $request) {
         $request->session()->put('cart', json_decode($request->get('cart')));
-        return view('user.cart', ["cart" => json_encode($request->session()->get('cart', '[]'))]);
+        return json_encode($request->get('cart'));
     }
 
-    public function cart1(Request $request) {
-        return "hello";
+    public function updatelocation(Request $request) {
+        $request->session()->put('location', $request->get('location'));
+        return ($request->get('location'));
     }
 
+    public function placeorder(Request $request) {
+        return view('user.order');
+    }
 }

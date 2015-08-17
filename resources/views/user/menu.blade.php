@@ -28,6 +28,27 @@
 
 @section('scripts')
 @parent
+    <div class="modal fade bs-example-modal-sm location-select-modal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+      <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <form id="location-select-form" method="post" action="{{ url('menu') }}" name="contactform2" class="row">
+                <fieldset>
+                    <div class="search">
+                        <input class="" name="location" type="text" id="location1" size="5" value="" placeholder="enter your location" required>
+                        <button type="button" class="btn btn-dark btn-fill btn-lg update_loc" id="submit1" value="Submit">Update</button>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+      </div>
+    </div> 
+
+    <form id="updatecart" method="post" action="{{ url('updatecart') }}">
+        <input type="hidden" name="_method" value="PUT">
+        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+        <input type="hidden" id="cart" name="cart" value="abcd">
+    </form>
+
     <script type="text/template" id="menu_item_template">
         <div class="col-sm-4">
         <div class="iconBox">
@@ -69,8 +90,8 @@
     
     <script type="text/javascript">
         var dishes = {!! $dishes !!};
+        var cart = {!! $cart !!};
         var current_hour = {{ Carbon::now('Asia/Kolkata')->format('h') }};
-        var cart = [];
 
         function DropDown(el) {
             this.dd = el;
@@ -99,6 +120,25 @@
             $('ul.dropdown li a').click(function() {
                 $(".date-dropdown")[0].childNodes[0].nodeValue = $(this).find('.day').html() + "-" + $(this).find('.date').html();
 
+            });
+            var countries = [
+                { value: 'Madiwala'},
+                { value: 'Koramangala'},
+                { value: 'Ejipura'},
+                { value: 'Marathahalli'},
+                { value: 'Electronic City'},
+                { value: 'Domlur'},
+                { value: 'Sony Singal'},
+                { value: 'Whitefield'}
+            ];
+
+            $('#location1').autocomplete({
+                lookup: countries,
+                minChars: 2,
+                onSelect: function (suggestion) {
+                    update_location(suggestion.value);
+                },
+                appendTo: $('.modal-content')[0]
             });
 
         });

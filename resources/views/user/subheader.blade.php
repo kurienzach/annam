@@ -53,8 +53,14 @@
             <tr>
                 <td>
                     <input type="checkbox" name="checkboxG4" id="checkbox1" class="css-checkbox" />
-                    <label for="checkbox1" class="location-label text-right">Deliver to <span>Madiwala <i class="fa fa-pencil"></i></span>
+                    <label for="checkbox1" class="location-label text-right"><a href="#" data-toggle="modal" data-target=".bs-example-modal-sm">Deliver to <span><span>{{ $location }}</span><i class="fa fa-pencil"></i></span></a>
                     </label>
+
+                    <form id="updatelocation" method="post" action="{{ url('updatelocation') }}">
+                        <input type="hidden" name="_method" value="PUT">
+                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                        <input type="hidden" id="txtlocation" name="location" value="{{ $location }}">
+                    </form>
                 </td>
             </tr>
         </table>

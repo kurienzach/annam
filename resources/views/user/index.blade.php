@@ -3,7 +3,6 @@
 @section('head')
 @parent
     <link rel="stylesheet" href="css/awesomplete.css" />
-    <script src="js/awesomplete.min.js" async></script>
 @stop
 
 @section('content')
@@ -13,11 +12,12 @@
                 <div class="col-sm-6 col-sm-offset-3 text-center panel">
                     <h3 class="font-serif wow fadeInRight" data-wow-duration="2s" data-wow-delay="0.3s">Homely food at<br> your door step</h3>
                     <p class="lead">annam homely food from the hands of mothers<br> who have years of great experience in the kitchens delivers your home with a little bit of love added to it.</p>
-                    <form method="post" action="#" name="contactform" id="contactform" class="row">
+                    <form method="post" action="{{ url('menu') }}" name="contactform" class="row">
                         <fieldset>
                             <div class="search">
                                 <span><i class="fa fa-map-marker map-location"></i></span>
-                                <input class="form-control input-lg input-sz location" name="location" type="text" id="location" size="5" value="" placeholder="enter your location">
+                                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                <input class="form-control input-lg input-sz location" name="location" type="text" id="location" size="5" value="" placeholder="enter your location" required>
                                 <button type="submit" class="btn btn-dark btn-fill btn-lg" id="submit" value="Submit">view menu</button>
                             </div>
                         </fieldset>
@@ -80,11 +80,12 @@
         <div class="col-sm-6 col-sm-offset-3 text-center panel">
             <h3 class="font-serif wow fadeInRight" data-wow-duration="2s" data-wow-delay="0.3s">Homely food at<br> your door step</h3>
             <p class="lead">annam homely food from the hands of mothers<br> who have years of great experience in the kitchens delivers<br> your home with a little bit of love added to it.</p>
-            <form method="post" action="#" name="contactform" id="contactform" class="row">
+            <form method="post" action="{{ url('menu') }}" name="contactform2" class="row">
                 <fieldset>
                     <div class="search">
                         <span><i class="fa fa-map-marker map-location"></i></span>
-                        <input class="form-control input-lg input-sz location" name="location" type="text" id="location1" size="5" value="" placeholder="enter your location">
+                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                        <input class="form-control input-lg input-sz location" name="location" type="text" id="location1" size="5" value="" placeholder="enter your location" required>
                         <button type="submit" class="btn btn-dark btn-fill btn-lg" id="submit" value="Submit">view menu</button>
                     </div>
                 </fieldset>
@@ -98,10 +99,24 @@
 
 <script>
     $(document).ready(function() {
-        var input = document.getElementById("location");
-        new Awesomplete(input, {
-            list: ["Ada", "Java", "JavaScript", "Brainfuck", "LOLCODE", "Node.js", "Ruby on Rails"]
-        });    
+        var countries = [
+            { value: 'Madiwala'},
+            { value: 'Koramangala'},
+            { value: 'Ejipura'},
+            { value: 'Marathahalli'},
+            { value: 'Electronic City'},
+            { value: 'Domlur'},
+            { value: 'Sony Singal'},
+            { value: 'Whitefield'}
+        ];
+
+        $('.location').autocomplete({
+            lookup: countries,
+            minChars: 2,
+            onSelect: function (suggestion) {
+                $(this).closest('form').submit();
+            }
+        });
     });
 </script>
 @stop

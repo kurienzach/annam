@@ -16,16 +16,16 @@
                 <div class="collapse navbar-collapse navbar-right navbar-main-collapse">
                     <ul class="nav navbar-nav" id="top-nav">
                         <li class="active">
-                            <a href="menu.html">Menu</a>
+                            <a href="{{ url('menu' )}}">Menu</a>
                         </li>
                         <li>
                             <a href="#">How it Works</a>
                         </li>
                         <li>
-                            <a href="login-registration.html">Login/Register</a>
+                            <a href="{{ url('login') }}">Login/Register</a>
                         </li>
                         <li class="cart-menu">
-                            <a href="#" class="cart-display"><span class="add-cart">0</span><img src="images/cart.png"></a>
+                            <a href="cart" class="cart-display"><span class="add-cart">0</span><img src="images/cart.png"></a>
                         </li>
                     </ul>
                 </div>

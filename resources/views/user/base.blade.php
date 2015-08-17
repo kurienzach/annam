@@ -48,6 +48,8 @@
 
         @section('scripts')
         <script src="{{ asset('js/jquery.min.js') }}"></script>
+        <script src="{{ asset('js/jquery.autocomplete.js') }}"></script>
+        <script src="{{ asset('js/jquery.form.min.js') }}"></script>
         <script src="{{ asset('js/bootstrap.min.js') }}"></script>
         <script src="{{ asset('js/owl.carousel.min.js') }}"></script>
         <script src="{{ asset('js/jquery.animsition.min.js') }}"></script>
@@ -58,6 +60,13 @@
         <script src="{{ asset('js/lodash.js') }}"></script>
         <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
         <script src="{{ asset('js/ie10-viewport-bug-workaround.js') }}"></script>
+
+        <script>
+            @if(!empty($cart))
+                var cart = {!! $cart !!};
+                $('.add-cart').text(cart.length);
+            @endif
+        </script>
         @show
     </body>
 </html>

@@ -2783,3 +2783,29 @@ position:absolute; z-index:-1000; left:-1000px; overflow: hidden; clip: rect(0 0
 .login-page{
 	margin-bottom:20px;
 }
+
+.modal-backdrop {
+    z-index: 0;
+}
+
+.modal-content,
+.modal-content .location-select-form {
+    height: 60px;
+}
+
+.modal-content fieldset {
+    margin-top: 10px;
+    margin-left: 25px;
+}
+
+.modal-content input {
+    width: 190px;
+}
+
+.modal-content .autocomplete-suggestions {
+    color: #fff;
+}
+
+.modal-content .autocomplete-suggestions strong{
+    color: #fff;
+}

@@ -10,7 +10,7 @@ return i.stellar.apply(i,Array.prototype.slice.call(arguments,0))},t[r].scrollPr
 
 //plugin bootstrap minus and plus
 //http://jsfiddle.net/laelitenetwork/puJ6G/
-function init_cart_add() {
+function init_cart_controls() {
 $('.btn-number').click(function(e){
     e.preventDefault();
     
@@ -64,22 +64,8 @@ $('.input-number').change(function() {
         alert('Sorry, the maximum value was reached');
         $(this).val($(this).data('oldValue'));
     }
-    
-
-    // Logic to add to cart
-    if(valueCurrent >= minValue && valueCurrent <= maxValue) {
-        if (valueCurrent == 0) {
-            // remove product from cart if already added
-            remove_from_cart($(this).closest('.iconBox').find('.dish-id').text(), $(this).val());
-        }
-        else {
-            // add product to cart
-            add_to_cart($(this).closest('.iconBox').find('.dish-id').text(), $(this).val());
-        }
-        $('.add-cart').text(cart.length);
-    }
-    
 });
+
 $(".input-number").keydown(function (e) {
         // Allow: backspace, delete, tab, escape, enter and .
         if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 190]) !== -1 ||
@@ -96,4 +82,15 @@ $(".input-number").keydown(function (e) {
         }
     });
 }
-	
+
+
+// Ajax cart update
+$('#updatecart').ajaxForm({success:function(data) {
+    console.log("Cart synced with server\n" + data);   
+}});
+
+function sync_cart_server() {
+    $('#updatecart #cart').val(JSON.stringify(cart));
+    $('#updatecart').submit();
+}
+
