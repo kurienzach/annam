@@ -27,6 +27,12 @@ Route::put('updatelocation', 'PagesController@updatelocation');
 
 Route::get('placeorder', ['middleware' => 'auth', 'uses' => 'PagesController@placeorder' ]);
 
+// Admin pages
+Route::get('admin/dishes', 'AdminController@dishes');
+Route::get('admin/dish', 'AdminController@addDish');
+Route::get('admin/dish/{id}', 'AdminController@editDish');
+Route::post('admin/storedish', 'AdminController@store');
+
 Route::controllers([
 	'auth' => 'Auth\AuthController',
 	'password' => 'Auth\PasswordController',

@@ -108,78 +108,80 @@
     <script type="text/javascript">
         var cart = {!! $cart !!};
         
-        template = _.template($('#cart-item-template').html());
-
         $(document).ready(function(){
+            template = _.template($('#cart-item-template').html());
+
             _.each(cart, function(item) {
                 $('.cart-items').append(template({"item": item}));
             });
 
             update_cart();
-        });
 
-        $('.input-number').change(function() {
-            minValue =  parseInt($(this).attr('min'));
-            maxValue =  parseInt($(this).attr('max'));
-            valueCurrent = parseInt($(this).val());
-            if(valueCurrent >= minValue && valueCurrent <= maxValue) {
-                add_to_cart($(this).closest('.divTableRow').find('.dishid').val(), $(this).val(), this);
-                update_cart();
-                sync_cart_server();
-            }
-        });
-
-        $('span.close-btn').click(function() {
-            remove_from_cart($(this).closest('.divTableRow').find('.dishid').val());
-            $(this).closest('.divTableRow').empty();
-            update_cart();
-            sync_cart_server();
-        });
-
-        function add_to_cart(item, qty, that) {
-            var index = search_in_cart(item);
-            cart[index]["qty"] = qty;
-            $(that).closest('.divTableRow').find('span.item-price').html(parseFloat(cart[index]['price'] * cart[index]['qty']).toFixed(2));
-        }
-
-        function remove_from_cart(item) {
-            var index = search_in_cart(item);
-            if (index != -1)
-                cart.splice(index, 1);
-        }
-
-        function search_in_cart(item) {
-            for (i = 0; i<cart.length; i++) {
-                if (cart[i]["id"] == item) {
-                    return i; 
+            $('.input-number').change(function() {
+                minValue =  parseInt($(this).attr('min'));
+                maxValue =  parseInt($(this).attr('max'));
+                valueCurrent = parseInt($(this).val());
+                if(valueCurrent >= minValue && valueCurrent <= maxValue) {
+                    add_to_cart($(this).closest('.divTableRow').find('.dishid').val(), $(this).val(), this);
+                    update_cart();
+                    sync_cart_server();
                 }
-            }
-            return -1;
-        }
-
-
-        function update_cart() {
-            cart_total = 0.0;
-
-            _.each(cart, function(item) {
-                cart_total += item['price'] * item['qty'];
             });
 
+            $('span.close-btn').click(function() {
+                remove_from_cart($(this).closest('.divTableRow').find('.dishid').val());
+                $(this).closest('.divTableRow').empty();
+                update_cart();
+                sync_cart_server();
+            });
 
-            $('.cart-total').html(parseFloat(cart_total).toFixed(2));
-            $('.sub-total').html(parseFloat(cart_total).toFixed(2));
-
-            if (cart_total != 0) {
-                $('.delivery-charges').html('30.00');
-                $('.grand-total span').html(parseFloat(cart_total + 30).toFixed(2));
+            function add_to_cart(item, qty, that) {
+                var index = search_in_cart(item);
+                cart[index]["qty"] = qty;
+                $(that).closest('.divTableRow').find('span.item-price').html(parseFloat(cart[index]['price'] * cart[index]['qty']).toFixed(2));
             }
-            else {
-                $('.delivery-charges').html('0.00');
-                $('.grand-total span').html('0.00');
-            } 
-        }
 
-        init_cart_controls();
+            function remove_from_cart(item) {
+                var index = search_in_cart(item);
+                if (index != -1)
+                    cart.splice(index, 1);
+            }
+
+            function search_in_cart(item) {
+                for (i = 0; i<cart.length; i++) {
+                    if (cart[i]["id"] == item) {
+                        return i; 
+                    }
+                }
+                return -1;
+            }
+
+
+            function update_cart() {
+                cart_total = 0.0;
+
+                _.each(cart, function(item) {
+                    cart_total += item['price'] * item['qty'];
+                });
+
+
+                $('.cart-total').html(parseFloat(cart_total).toFixed(2));
+                $('.sub-total').html(parseFloat(cart_total).toFixed(2));
+
+                if (cart_total != 0) {
+                    $('.delivery-charges').html('30.00');
+                    $('.grand-total span').html(parseFloat(cart_total + 30).toFixed(2));
+                }
+                else {
+                    $('.delivery-charges').html('0.00');
+                    $('.grand-total span').html('0.00');
+                } 
+
+                $('.add-cart').html(cart.length);
+            }
+
+            init_cart_controls();
+        });
     </script>
 @stop
 

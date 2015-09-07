@@ -57,7 +57,7 @@
         <div class="iconBox">
             <span style="display:none" class="dish-id"><%= dish["id"] %></span>
             <a href="#" class="thumbnail">
-                <img src="{{ asset('images') }}<%= "/" + dish["img_url"] %>" alt="...">
+                <img src="{{ asset('images/dishes/') }}<%= "/" + dish["img_url"] %>" alt="...">
             </a>
             <div class="iconBox-content">
                 <h4><%= dish["name"] %></h4>

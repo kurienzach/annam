@@ -23,7 +23,7 @@
                         </li>
                         <li>
                             @if (Auth::check())
-                                <a href="">Hi {{ Auth::user()->email }}</a>
+                                <a href="">Hi {{ Auth::user()->name }}</a>
                             @else
                                 <a href="{{ url('login') }}">Login/Register</a>
                             @endif

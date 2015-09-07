@@ -51,10 +51,12 @@ class PagesController extends Controller {
             return redirect('/'); 
         }
 
-        $dishes_db = Dish::all();
+        $dishes_db = Dish::where('enabled', True)->get();
 
         // Find dishes available only for the specific day
 
+        // Curently the logic for dishes occuring on specific dates is
+        // not implemented. The only option is to enable disable a dish
         $dishes = collect();
 
         foreach ($dishes_db as $dish) 
@@ -98,6 +100,7 @@ class PagesController extends Controller {
     }
 
     public function placeorder(Request $request) {
+        // Add logic to place order here
         return view('user.order');
     }
 }

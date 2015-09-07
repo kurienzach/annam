@@ -1,0 +1,11 @@
+table td.dish-img{
+    text-align: center;
+}
+
+table td.dish-img img{
+    height: 50px;
+}
+
+table.table-bordered tbody td {
+    vertical-align: middle;
+}
