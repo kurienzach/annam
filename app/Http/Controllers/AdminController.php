@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Validator;
 
 use App\Dish;
+use App\DishCategory;
 
 
 class AdminController extends Controller {
@@ -76,6 +77,15 @@ class AdminController extends Controller {
         // Request is for update operation
         $dish->name = $request->get('name');
         $dish->description = $request->get('description');
+
+        $categories = [];
+        if ($request->has('breakfast'))
+            array_push($categories, 1);
+        if ($request->has('lunch'))
+            array_push($categories, 2);
+        if ($request->has('dinner'))
+            array_push($categories, 3);
+
         $dish->price = $request->get('price');
         if ($request->has('enabled'))
             $dish->enabled = True;
@@ -90,6 +100,7 @@ class AdminController extends Controller {
         }
 
         $dish->save();
+        $dish->categories()->sync($categories);
 
         return redirect(url('admin/dishes'));
     }

@@ -28,6 +28,18 @@
                     <textarea class="form-control" name="description" rows="3">{{ $dish->description or Null }}</textarea>
                 </div>
                 <div class="form-group">
+                    <label>Categories</label><br>
+                    <label class="checkbox-inline" style="margin-left: 9px">
+                        <input name="breakfast" type="checkbox" @if (isset($dish) && $dish->categories()->get()->contains('id', 1)) checked @endif>Breakfast
+                    </label>
+                    <label class="checkbox-inline" style="margin-left: 9px">
+                        <input name="lunch" type="checkbox" @if (isset($dish) && $dish->categories()->get()->contains('id', 2)) checked @endif>Lunch
+                    </label>
+                    <label class="checkbox-inline" style="margin-left: 9px">
+                        <input name="dinner" type="checkbox" @if (isset($dish) && $dish->categories()->get()->contains('id', 3)) checked @endif>Dinner
+                    </label>
+                </div>
+                <div class="form-group">
                     <label>Dish Price</label>
                     <div class="input-group">
                         <span class="input-group-addon">$</span>
