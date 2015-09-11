@@ -82,6 +82,8 @@
         <div class="divTable">
             <div class="divTableRow">
                 <input type="hidden" class="dishid" name="id" value="<%= item['id'] %>">
+                <input type="hidden" class="dishdate" name="dishdate" value="<%= item['date'] %>">
+                <input type="hidden" class="dishcategory" name="dishcategory" value="<%= item['category'] %>">
                 <div class="divTableCell wdt30"><%= item['name'] %></div>
                 <div class="divTableCell wdt30"><%= item['price'] %></div>
                 <div class="divTableCell wdt10">
@@ -110,10 +112,27 @@
         
         $(document).ready(function(){
             template = _.template($('#cart-item-template').html());
+            $cart_items = $('.cart-items');
 
-            _.each(cart, function(item) {
-                $('.cart-items').append(template({"item": item}));
+            //group the cart on date first
+            date_grouped_cart = _.groupBy(cart, 'date');
+
+            _.each(date_grouped_cart, function(dishes_on_date, date){
+                if (dishes_on_date.length != 0)
+                    $cart_items.append('<div class="cart-date-row">' + date + '</div>');
+                // Group by category now
+                cat_grouped_cart = _.groupBy(dishes_on_date, 'category');
+
+                _.each(cat_grouped_cart, function(dishes, category) {
+                    if (dishes.length != 0)
+                        $cart_items.append('<div class="cart-category-row">' + category + '</div>');
+
+                    _.each(dishes, function(item) {
+                        $cart_items.append(template({"item": item}));
+                    });
+                });
             });
+
 
             update_cart();
 
@@ -122,35 +141,38 @@
                 maxValue =  parseInt($(this).attr('max'));
                 valueCurrent = parseInt($(this).val());
                 if(valueCurrent >= minValue && valueCurrent <= maxValue) {
-                    add_to_cart($(this).closest('.divTableRow').find('.dishid').val(), $(this).val(), this);
+                    $dish = $(this).closest('.divTableRow');
+                    add_to_cart($dish.find('.dishid').val(), $dish.find('.dishdate').val(), $dish.find('.dishcategory').val(), $(this).val(), this);
                     update_cart();
                     sync_cart_server();
                 }
             });
 
             $('span.close-btn').click(function() {
-                remove_from_cart($(this).closest('.divTableRow').find('.dishid').val());
+                $dish = $(this).closest('.divTableRow');
+                remove_from_cart($dish.find('.dishid').val(), $dish.find('.dishdate').val(), $dish.find('.dishcategory').val());
                 $(this).closest('.divTableRow').empty();
                 update_cart();
                 sync_cart_server();
             });
 
-            function add_to_cart(item, qty, that) {
-                var index = search_in_cart(item);
+            function add_to_cart(item, dish_date, dish_category, qty, that) {
+                var index = search_in_cart(item, dish_date, dish_category);
                 cart[index]["qty"] = qty;
                 $(that).closest('.divTableRow').find('span.item-price').html(parseFloat(cart[index]['price'] * cart[index]['qty']).toFixed(2));
             }
 
-            function remove_from_cart(item) {
-                var index = search_in_cart(item);
+            function remove_from_cart(item, dish_date, dish_category) {
+                var index = search_in_cart(item, dish_date, dish_category);
                 if (index != -1)
                     cart.splice(index, 1);
             }
 
-            function search_in_cart(item) {
+            function search_in_cart(item, dish_date, dish_category) {
                 for (i = 0; i<cart.length; i++) {
                     if (cart[i]["id"] == item) {
-                        return i; 
+                        if (cart[i]["date"] == dish_date && cart[i]["category"] == dish_category)
+                            return i; 
                     }
                 }
                 return -1;

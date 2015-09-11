@@ -14,7 +14,6 @@ function init_cart_controls() {
 $('.btn-number').click(function(e){
     e.preventDefault();
     
-    console.log ("Hello");
     fieldName = $(this).attr('data-field');
     type      = $(this).attr('data-type');
     var input = $(this).parent().parent().find("input[name='"+fieldName+"']");

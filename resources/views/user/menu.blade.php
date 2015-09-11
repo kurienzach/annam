@@ -11,6 +11,7 @@
         <div class="container">
             <div class="row text-center-sm">
             <div class="col-sm-12">
+                <div class="select-category-text well text-center">Please select a time of the dish</div>
                 <div class="row dishes-holder">
                     
                 </div>
@@ -94,7 +95,10 @@
     <script type="text/javascript">
         var dishes = {!! $dishes !!};
         var cart = {!! $cart !!};
-        var current_hour = {{ Carbon::now('Asia/Kolkata')->format('h') }};
+        var current_hour = {{ Carbon::now('Asia/Kolkata')->format('H') }};
+        var today_date = "{{ Carbon::now('Asia/Kolkata')->format('d/m/y') }}";
+        var menu_date = today_date;
+        var menu_category;
 
         function DropDown(el) {
             this.dd = el;
@@ -124,6 +128,11 @@
                 $(".date-dropdown")[0].childNodes[0].nodeValue = $(this).find('.day').html() + "-" + $(this).find('.date').html();
 
             });
+
+            $('.location-select-modal').on('show.bs.modal', function (e) {
+                $('#location1').focus();
+            })
+
             var countries = [
                 { value: 'Madiwala'},
                 { value: 'Koramangala'},
@@ -138,6 +147,7 @@
             $('#location1').autocomplete({
                 lookup: countries,
                 minChars: 2,
+                autoSelectFirst: true,
                 onSelect: function (suggestion) {
                     update_location(suggestion.value);
                 },

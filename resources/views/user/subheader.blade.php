@@ -7,19 +7,19 @@
     <div id="dd" class="wrapper-dropdown-2 date-dropdown" tabindex="1">Today's Menu – {{ Carbon::now('Asia/Kolkata')->format('M dS') }}
         <ul class="dropdown">
             <li>
-                <a href="#">
+                <a href="#" id="menu-today" class="menu-date-select" data-date="{{ Carbon::now('Asia/Kolkata')->format('d/m/y') }}">
                     <div class="day">Today's Menu</div>
                     <div class="date">{{ Carbon::now('Asia/Kolkata')->format('M dS') }}</div>
                 </a>
             </li>
             <li>
-                <a href="#">
+                <a href="#" id="menu-tomorrow" class="menu-date-select" data-date="{{ Carbon::now('Asia/Kolkata')->addDay()->format('d/m/y') }}">
                     <div class="day">Tomorrow's Menu</div>
                     <div class="date">{{ Carbon::now('Asia/Kolkata')->addDay()->format('M dS') }}</div>
                 </a>
             </li>
             <li>
-                <a href="#">
+                <a href="#" id="menu-dayafter" class="menu-date-select" data-date="{{ Carbon::now('Asia/Kolkata')->addDays(2)->format('d/m/y') }}">
                     <div class="day">{{ Carbon::now('Asia/Kolkata')->addDays(2)->format('l') }}'s Menu</div>
                     <div class="date">{{ Carbon::now('Asia/Kolkata')->addDays(2)->format('M dS') }}</div>
                 </a>

@@ -3,6 +3,7 @@
 @section('head')
 @parent
     <link rel="stylesheet" href="css/awesomplete.css" />
+
 @stop
 
 @section('content')
@@ -17,8 +18,8 @@
                             <div class="search">
                                 <span><i class="fa fa-map-marker map-location"></i></span>
                                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                                <input class="form-control input-lg input-sz location" name="location" type="text" id="location" size="5" value="" placeholder="enter your location" required>
-                                <button type="submit" class="btn btn-dark btn-fill btn-lg" id="submit" value="Submit">view menu</button>
+                                <input class="form-control input-lg input-sz location" name="location" type="text" id="location" size="5" value="" placeholder="enter your location" required autofocus>
+                                <button type="submit" class="btn btn-dark btn-fill btn-lg" id="btn-submit" value="Submit">view menu</button>
                             </div>
                         </fieldset>
                     </form>
@@ -86,7 +87,7 @@
                         <span><i class="fa fa-map-marker map-location"></i></span>
                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
                         <input class="form-control input-lg input-sz location" name="location" type="text" id="location1" size="5" value="" placeholder="enter your location" required>
-                        <button type="submit" class="btn btn-dark btn-fill btn-lg" id="submit" value="Submit">view menu</button>
+                        <button type="submit" class="btn btn-dark btn-fill btn-lg" id="btn-submit1" value="Submit">view menu</button>
                     </div>
                 </fieldset>
             </form>
@@ -113,6 +114,7 @@
         $('.location').autocomplete({
             lookup: countries,
             minChars: 2,
+            autoSelectFirst: true,
             onSelect: function (suggestion) {
                 $(this).closest('form').submit();
             }

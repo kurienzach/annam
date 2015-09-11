@@ -2803,11 +2803,11 @@ position:absolute; z-index:-1000; left:-1000px; overflow: hidden; clip: rect(0 0
 }
 
 .modal-content .autocomplete-suggestions {
-    color: #fff;
+    color: #333;
 }
 
 .modal-content .autocomplete-suggestions strong{
-    color: #fff;
+    color: #333;
 }
 
 .alert-box {
@@ -2816,4 +2816,13 @@ position:absolute; z-index:-1000; left:-1000px; overflow: hidden; clip: rect(0 0
     right: 35px;
     width: 250px;
     z-index: 200;
+}
+
+.cart-date-row {
+    border-bottom: 1px solid #f0f1f3;
+}
+
+.cart-category-row {
+    text-align: left;
+    background: #eee;
 }
