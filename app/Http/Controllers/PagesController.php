@@ -3,8 +3,12 @@
 use Auth;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
+use App\Order;
+use App\OrderDish;
+use App\Location;
 use App\Dish;
+
+use Carbon\Carbon;
 
 use Illuminate\Http\Request;
 
@@ -33,8 +37,10 @@ class PagesController extends Controller {
 
     public function index(Request $request)
     {
+        $locations = Location::all();
         return view('user.index', [
-            "cart" => json_encode($request->session()->get('cart', array()))
+            "cart" => json_encode($request->session()->get('cart', array())),
+            "locations" => $locations
         ]);
     }
 
@@ -78,10 +84,13 @@ class PagesController extends Controller {
             $dishes->push($dish_item);
         }
 
+        $locations = Location::all();
+
         return view('user.menu', [
             "dishes" => $dishes, 
             "cart" => json_encode($request->session()->get('cart', array())),
-            "location" => $request->session()->get('location')
+            "location" => $request->session()->get('location'),
+            "locations" => $locations->toJSON()
         ]);
     }
 
@@ -101,6 +110,50 @@ class PagesController extends Controller {
 
     public function placeorder(Request $request) {
         // Add logic to place order here
+        $user = Auth::getUser();
+        $cart = json_decode($request->get('cart'));
+
+        if ($request->get('cart') == "{}")
+            return 'Error';
+
+        // The cart variable obained is already grouped on
+        // date and category add the orders to the tables
+        foreach($cart as $date => $cartdate) {
+            foreach($cartdate as $category => $cartdatecat) {
+                $order = new Order();
+                $order->order_date = Carbon::createFromFormat('d/m/y', $date);
+                $order->category = $category;
+                $order->user_id = $user->id;
+                $order->mobile_no = $user->mobile;
+                $order->delivery_address = $request->session()->get('location');
+                $order->save();
+
+                $noItems = 0;
+                $totalPrice = 30.0;
+
+                foreach($cartdatecat as $item) {
+                    $dish = Dish::find($item->id);
+
+                    $orderdish = new OrderDish();   
+                    $orderdish->order_id = $order->id;
+                    $orderdish->dish_id = $item->id;
+                    $orderdish->dish_name = $dish->name;
+                    $orderdish->dish_price = $dish->price;
+                    $orderdish->dish_qty = $item->qty;
+                    $orderdish->save();
+
+                    $noItems += 1;
+                    $totalPrice += $orderdish->dish_price * $orderdish->dish_qty;
+                }
+
+                $order->no_items = $noItems;
+                $order->total_price = $totalPrice;
+                $order->save();
+            }
+        }
+
+        $request->session()->forget('cart');
+
         return view('user.order');
     }
 }

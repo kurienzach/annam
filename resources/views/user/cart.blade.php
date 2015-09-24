@@ -53,8 +53,12 @@
                 </div>
                 <div class="total grand-total">Total <span>0.00</span>
                 </div>
-                <!--input type="submit" value="Proceed Pay" class="btn btn-dark btn-fill btn-lg proceed-pay"-->
-                <a href="placeorder" class="btn btn-dark btn-fill btn-lg proceed-pay">Proceed Pay</a>
+                <form id="form-order" method="post" action="{{ url('placeorder') }}">
+                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                    <input type="hidden" id="order-cart" name="cart" value="">
+                    <input id="btnOrder" type="submit" value="Proceed Pay" class="btn btn-dark btn-fill btn-lg proceed-pay">
+                </form>
+                <!--a href="placeorder" class="btn btn-dark btn-fill btn-lg proceed-pay">Proceed Pay</a-->
             </div>
         </div>
 
@@ -109,6 +113,7 @@
 
     <script type="text/javascript">
         var cart = {!! $cart !!};
+        var grouped_cart = {};
         
         $(document).ready(function(){
             template = _.template($('#cart-item-template').html());
@@ -118,19 +123,41 @@
             date_grouped_cart = _.groupBy(cart, 'date');
 
             _.each(date_grouped_cart, function(dishes_on_date, date){
-                if (dishes_on_date.length != 0)
-                    $cart_items.append('<div class="cart-date-row">' + date + '</div>');
+                $cart_items.append('<div class="cart-date-row">' + date + '</div>');
                 // Group by category now
                 cat_grouped_cart = _.groupBy(dishes_on_date, 'category');
 
                 _.each(cat_grouped_cart, function(dishes, category) {
-                    if (dishes.length != 0)
-                        $cart_items.append('<div class="cart-category-row">' + category + '</div>');
+                    $cart_items.append('<div class="cart-category-row">' + category + '</div>');
 
                     _.each(dishes, function(item) {
                         $cart_items.append(template({"item": item}));
                     });
                 });
+            });
+
+            if (cart.length == 0) {
+                $cart_items.append('<div>No items in the cart</div>');
+                $('#btnOrder').hide();
+            }
+
+
+            $('#form-order').submit(function() {
+                //group the cart on date first
+                date_grouped_cart = _.groupBy(cart, 'date');
+
+                _.each(date_grouped_cart, function(dishes_on_date, date){
+                    grouped_cart[date] = {};
+                    // Group by category now
+                    cat_grouped_cart = _.groupBy(dishes_on_date, 'category');
+
+                    _.each(cat_grouped_cart, function(dishes, category) {
+                        grouped_cart[date][category] = dishes;
+                    });
+                });
+
+                $(this).find('#order-cart').val(JSON.stringify(grouped_cart));
+                
             });
 
 

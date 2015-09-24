@@ -25,13 +25,24 @@ Route::get('cart', 'PagesController@cart');
 Route::put('updatecart', 'PagesController@updatecart');
 Route::put('updatelocation', 'PagesController@updatelocation');
 
-Route::get('placeorder', ['middleware' => 'auth', 'uses' => 'PagesController@placeorder' ]);
+Route::get('placeorder', 'PagesController@cart');
+Route::post('placeorder', ['middleware' => 'auth', 'uses' => 'PagesController@placeorder' ]);
 
 // Admin pages
 Route::get('admin/dishes', 'AdminController@dishes');
 Route::get('admin/dish', 'AdminController@addDish');
 Route::get('admin/dish/{id}', 'AdminController@editDish');
 Route::post('admin/storedish', 'AdminController@store');
+
+Route::get('admin/orders/today', 'AdminController@ordersToday');
+Route::get('admin/orders/all', 'AdminController@ordersAll');
+Route::get('admin/orders/delivered', 'AdminController@ordersDelivered');
+Route::get('admin/orders/{id}', 'AdminController@showOrder');
+
+Route::get('admin/locations', 'AdminController@locations');
+Route::get('admin/location', 'AdminController@addLocation');
+Route::get('admin/location/{id}', 'AdminController@editLocation');
+Route::post('admin/storelocation', 'AdminController@storeLocation');
 
 Route::controllers([
 	'auth' => 'Auth\AuthController',

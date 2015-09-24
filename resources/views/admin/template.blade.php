@@ -143,10 +143,26 @@
                             <a href="index.html"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
                         </li>
                         <li>
-                            <a href="tables.html"><i class="fa fa-table fa-fw"></i> Orders</a>
+                            <a href="tables.html"><i class="fa fa-table fa-fw"></i> Orders
+                                <span class="fa arrow"></span>
+                            </a>
+                            <ul class="nav nav-second-level collapse in" aria-expanded="false">
+                                <li>
+                                    <a href="{{ url('admin/orders/today') }}">Today and Tomorrow</a>
+                                </li>
+                                <li>
+                                    <a href="{{ url('admin/orders/all') }}">All Orders</a>
+                                </li>
+                                <li>
+                                    <a href="{{ url('admin/orders/delivered') }}">Delivered Orders</a>
+                                </li>
+                            </ul>
                         </li>
                         <li>
                             <a href="{{ url('admin/dishes') }}"><i class="fa fa-edit fa-fw"></i> Dishes</a>
+                        </li>
+                        <li>
+                                <a href="{{ url('admin/locations') }}"><i class="fa fa-map-marker fa-fw"></i> Locations</a>
                         </li>
                         
                     </ul>

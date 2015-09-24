@@ -8,9 +8,19 @@ use Validator;
 
 use App\Dish;
 use App\DishCategory;
+use App\Order;
+use App\User;
+use App\OrderDish;
+use App\Location;
 
+use Carbon\Carbon;
 
 class AdminController extends Controller {
+    /*
+    |--------------------------------------------------------------------------
+    | Dishes controllers
+    |--------------------------------------------------------------------------
+    */
 
     public function dishes() {
         $dishes = Dish::all(); 
@@ -103,5 +113,114 @@ class AdminController extends Controller {
         $dish->categories()->sync($categories);
 
         return redirect(url('admin/dishes'));
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Orders controllers
+    |--------------------------------------------------------------------------
+    */
+
+    public function ordersToday()
+    {
+        $overdue = Order::where('delivered', false)->where('order_date', '<', Carbon::now()->toDateString())->get();
+        $today = Order::where('delivered', false)->where('order_date', '=', Carbon::now()->toDateString())->get();
+        $tomorrow = Order::where('delivered', false)->where('order_date', '=', Carbon::now()->addDay()->toDateString())->get();
+        return view('admin.orders_today', [
+            'overdue_orders' => $overdue,
+            'tomorrow_orders' => $tomorrow,
+            'today_orders' => $today 
+        ]);
+    }
+
+    public function ordersAll()
+    {
+        $orders = Order::where('delivered', false)->get();
+        return view('admin.orders_all', [
+            'orders' => $orders 
+        ]);
+    }
+
+    public function ordersDelivered()
+    {
+        $orders = Order::where('delivered', true)->get();
+        return view('admin.orders_delivered', [
+            'orders' => $orders 
+        ]);
+    }
+
+    public function showOrder($id)
+    {
+        $order = Order::findOrFail($id);
+        return view('admin.order', [
+            'order' => $order 
+        ]);
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Locations controllers
+    |--------------------------------------------------------------------------
+    */
+    public function locations()
+    {
+        $locations = Location::all();
+        return view('admin.locations', [
+            'locations' => $locations 
+        ]);
+    }
+
+    public function editLocation($id)
+    {
+        $location = Location::findOrFail($id);
+        return view('admin.location', [
+            'location' => $location 
+        ]);
+    }
+
+    public function storeLocation(Request $request)
+    {
+        // Validations
+        $validation = Validator::make(
+            $request->all(),
+            array(
+                'name' => 'required|max:100',
+                'city' => 'required|max:100',
+                'state' => 'required|max:100'
+            )
+        );
+
+        if ($validation->fails()) {
+            $messages = $validation->messages();
+            return redirect()->back()->withErrors($messages)->withInput();
+        }
+
+        // Check if request is for create or edit 
+        if (empty($request->get('id'))) {
+            $location = new Location();
+        }
+        else {
+            $location = Location::findOrFail($request->get('id'));
+        }
+
+        // Check if the request is for deletion
+        if ($request->has('delete')) {
+            $location->delete();
+            return redirect(url('admin/locations'));
+        }
+
+        // Request is for update operation
+        $location->name = $request->get('name');
+        $location->city = $request->get('city');
+        $location->state = $request->get('state');
+
+        $location->save();
+
+        return redirect(url('admin/locations'));
+    }
+
+    public function addLocation()
+    {
+        return view('admin.location');
     }
 }

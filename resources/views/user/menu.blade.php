@@ -115,6 +115,17 @@
             }
         }
 
+        var locations_list = {!! $locations !!};
+        var locations = [];
+        var locations_array = [];
+
+        _.each(locations_list, function(location){
+            temp = {};
+            temp['value'] = location['name'];
+            locations.push(temp);
+            locations_array.push(location['name']);
+        });
+
         $(function() {
 
             var dd = new DropDown($('#dd'));
@@ -133,25 +144,21 @@
                 $('#location1').focus();
             })
 
-            var countries = [
-                { value: 'Madiwala'},
-                { value: 'Koramangala'},
-                { value: 'Ejipura'},
-                { value: 'Marathahalli'},
-                { value: 'Electronic City'},
-                { value: 'Domlur'},
-                { value: 'Sony Singal'},
-                { value: 'Whitefield'}
-            ];
-
             $('#location1').autocomplete({
-                lookup: countries,
+                lookup: locations,
                 minChars: 2,
                 autoSelectFirst: true,
                 onSelect: function (suggestion) {
                     update_location(suggestion.value);
                 },
                 appendTo: $('.modal-content')[0]
+            });
+
+            $('#location-select-form').submit(function() {
+                if (!(locations_array.indexOf($(this).find('.location').val()) > -1)) {
+                    alert("Please select a valid location for delivery!!");
+                    return false;
+                }
             });
 
         });
