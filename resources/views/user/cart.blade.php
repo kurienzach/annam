@@ -1,28 +1,22 @@
 @extends('user.base')
 @section('content')
 <div class="inner-page-wrap">
-<div class="inner-hero bg-image overlay" data-image-src="images/home-3.jpg" data-stellar-background-ratio="0.8" style="background:url(images/home-3.jpg) cover no-repeat;">
+<div class="inner-hero bg-light">
 <div class="container">
 <div class="row">
-<div class="col-md-12 col-md-offset-0 text-center">
+<div class="col-md-12 col-md-offset-0 signup-view text-center">
 
     <div class="col-md-12 text-center">
         <div class="pricing-table">
             <h3 class="cart"><img src="images/cart.png" class="cart-contain"> Your Cart Contains</h3>
             <div class="price-bill">
 
-                <div class="divTable">
-                    <div class="divTableRow">
-                        <div class="divTableCell wdt30"><b>Item Name</b>
-                        </div>
-                        <div class="divTableCell wdt30"><b>Unit Price (Rs)</b>
-                        </div>
-                        <div class="divTableCell wdt10 padding-left"><b>Qty</b>
-                        </div>
-                        <div class="divTableCell wdt20"><b>Price (Rs)</b>
-                        </div>
+               <div class="price-bill">
+                    <div class="divTable border-bottom padding-10">
+                      <div class="divTableRow">
+                        <div class="divTableCell wdt20 text-left"><b>Saturday, September 19 <i class="fa fa-pencil"></i></b></div>
+                      </div>
                     </div>
-                </div>
 
                 <div class="cart-items"></div>
 
@@ -233,4 +227,3 @@
         });
     </script>
 @stop
-

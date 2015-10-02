@@ -14,7 +14,6 @@ class AddFieldToUserTable extends Migration {
 	{
 		Schema::table('users', function(Blueprint $table)
 		{
-			$table->string('mobile');
             $table->boolean('activated')->default('0');
 		});
 	}
@@ -28,7 +27,6 @@ class AddFieldToUserTable extends Migration {
 	{
 		Schema::table('users', function(Blueprint $table)
 		{
-			$table->dropColumn('mobile');
 			$table->dropColumn('activated');
 		});
 	}

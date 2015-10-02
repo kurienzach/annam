@@ -1,7 +1,7 @@
 @extends('user.base')
 @section('content')
 <div class="inner-page-wrap">
-    <div class="inner-hero bg-image overlay" data-image-src="images/home-3.jpg" data-stellar-background-ratio="0.8" style="background:url(images/home-3.jpg) cover no-repeat;">
+    <div class="inner-hero bg-light">
         <div class="container">
             <div class="row">
                 <div class="col-md-12 col-md-offset-0 signup-view text-center">
@@ -15,7 +15,7 @@
                     <div class="col-md-6">
                         <div class="signup-message">
                             <div class="col-md-12">
-                                <h4 class="text-left login-page">Create an account</h4>
+                                <h3 class="text-left login-page">Create an account</h3>
                                 <form action="{{ url('/auth/register') }}" method="post" id="request-quote-form">
                                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
                                     <fieldset class="row">
@@ -44,7 +44,7 @@
                     <div class="col-md-6">
                         <div class="signup-message">
                             <div class="col-md-12">
-                                <h4 class="text-left login-page">Sign in</h4>
+                                <h3 class="text-left login-page">Login to your Account</h3>
                                 <form action="login" method="post" id="request-quote-form">
                                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
                                     <fieldset class="row">
@@ -71,8 +71,8 @@
 
                     </div>
                     <div class="col-md-12 text-center">
-                        <p class="lead margin-top-30">We care about your privacy, and we never spam. By creating an account, you agree to annam
-                            <br>User Agreement and <a href="#" class="login">Privacy Policy.</a> We're proud of them, and you should read them. Sign up for free</p>
+                       <p class="lead margin-top-30">By signing up, you agree to the <a href="#" class="login">Privacy Policy & Terms of Service.</a></p>
+              </div>
                     </div>
 
                 </div>
@@ -88,4 +88,3 @@
 @parent
     
 @stop
-

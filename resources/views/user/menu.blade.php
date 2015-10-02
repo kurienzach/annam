@@ -68,11 +68,7 @@
                 <div class="media-heading">
                     <div class="amount pull-left"><strong>Rs.<%= dish["price"] %></strong></div>
                   
-                    <div class="order-now pull-right">
-                        <button type="submit" class="btn btn-dark btn-fill btn-lg order-btn" id="submit" value="Submit">order now</button>
-                    </div>
-
-                    <div class="input-group pull-right">
+                        <div class="input-group pull-right">
                         <span class="input-group-btn">
                         <button type="button" class="btn btn-default btn-number" data-type="minus" data-field="quant[1]">
                         <span class="glyphicon glyphicon-minus"></span>

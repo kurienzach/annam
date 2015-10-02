@@ -22,6 +22,7 @@ class CreateDishesTable extends Migration {
             $table->boolean('featured');
             $table->boolean('nonveg');
             $table->boolean('reccuring_availability');
+            $table->boolean('enabled')->default('0');
 			$table->timestamps();
 		});
 	}

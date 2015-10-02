@@ -1,8 +1,8 @@
 <?php use Carbon\Carbon; ?>
-<div class="cta-1 border space-sm">
+<div class="cta-1 border space-am">
 <div class="container">
 <div class="row vertical-align">
-    <div class="col-md-4">
+    <div class="col-md-4 col-xs-12">
     <div class="wrapper-demo">
     <div id="dd" class="wrapper-dropdown-2 date-dropdown" tabindex="1">Today's Menu – {{ Carbon::now('Asia/Kolkata')->format('M dS') }}
         <ul class="dropdown">
@@ -28,7 +28,7 @@
     </div>
     </div>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-4 col-xs-12">
     <div class="wrapper-demo">
         <table>
             <tr>
@@ -48,12 +48,12 @@
         </table>
     </div>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-4 col-xs-12 disable">
         <table class="float-right">
             <tr>
                 <td>
                     <input type="checkbox" name="checkboxG4" id="checkbox1" class="css-checkbox" />
-                    <label for="checkbox1" class="location-label text-right"><a href="#" data-toggle="modal" data-target=".bs-example-modal-sm">Deliver to <span><span>{{ $location }}</span><i class="fa fa-pencil"></i></span></a>
+                    <label for="checkbox1" class="location-label text-right"><a href="#" data-toggle="modal" data-target=".bs-example-modal-sm">Deliver to <span><span>{{ $location }}</span> <i class="fa fa-pencil"></i></span></a>
                     </label>
 
                     <form id="updatelocation" method="post" action="{{ url('updatelocation') }}">
