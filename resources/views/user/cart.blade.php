@@ -12,47 +12,46 @@
             <div class="price-bill">
 
                <div class="price-bill">
-                    <div class="divTable border-bottom padding-10">
+                    <!-- Div for cart items -->
+                    <div class="cart-items"></div>
+
+                    <!-- Div for amount and total -->
+                    <div class="divTable tax">
                       <div class="divTableRow">
-                        <div class="divTableCell wdt20 text-left"><b>Saturday, September 19 <i class="fa fa-pencil"></i></b></div>
+                        <div class="divTableCell text-right">Item Total (Rs)</div>
+                        <div class="divTableCell text-right padding-right cart-total">0.00</div>
+                      </div>
+                      <div class="divTableRow">
+                        <div class="divTableCell text-right">
+                          <button type="submit" class="btn btn-dark btn-fill float-left" id="submit" value="Submit">
+                          <a class="view-menu" href="{{ url('/menu') }}">Add More</a>
+                          </button>
+                          All Taxes ({{ $rates->all_taxes }}%)(Rs)</div>
+                        <div class="divTableCell text-right padding-right label-taxes">0.00</div>
+                      </div>
+                      <div class="divTableRow">
+                        <div class="divTableCell text-right">Carry Bag cost (Rs)</div>
+                        <div class="divTableCell text-right padding-right label-carry-bag">0.00</div>
                       </div>
                     </div>
 
-                <div class="cart-items"></div>
-
-                <div class="divTable tax">
-                    <div class="divTableRow">
-                        <div class="divTableCell text-right">Item Total (Rs)</div>
-                        <div class="divTableCell text-right padding-right cart-total">0.00</div>
-                    </div>
-                    <div class="divTableRow">
-                        <div class="divTableCell text-right">All Taxes (Rs)</div>
-                        <div class="divTableCell text-right padding-right">0.00</div>
-                    </div>
-                    <div class="divTableRow">
-                        <div class="divTableCell text-right">Carry Bag cost (Rs)</div>
-                        <div class="divTableCell text-right padding-right">0.00</div>
-                    </div>
-                </div>
-
-                <div class="divTable tax">
-                    <div class="divTableRow">
+                    <div class="divTable tax">
+                      <div class="divTableRow">
                         <div class="divTableCell text-right">Subtotal (Rs)</div>
                         <div class="divTableCell text-right padding-right sub-total">0.00</div>
-                    </div>
-                    <div class="divTableRow">
+                      </div>
+                      <div class="divTableRow">
                         <div class="divTableCell text-right">Delivery Charge (Rs)</div>
                         <div class="divTableCell text-right padding-right delivery-charges">0.00</div>
+                      </div>
                     </div>
-                </div>
-                <div class="total grand-total">Total <span>0.00</span>
-                </div>
-                <form id="form-order" method="post" action="{{ url('placeorder') }}">
-                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                    <input type="hidden" id="order-cart" name="cart" value="">
-                    <input id="btnOrder" type="submit" value="Proceed Pay" class="btn btn-dark btn-fill btn-lg proceed-pay">
-                </form>
-                <!--a href="placeorder" class="btn btn-dark btn-fill btn-lg proceed-pay">Proceed Pay</a-->
+
+                    <div class="total padding-right-48 grand-total">Total <span>0.00</span></div>
+                    @if (count(json_decode($cart)) != 0)
+                    <button type="submit" class="btn btn-dark btn-fill proceed-pay" id="submit" value="Submit">
+                    <a class="view-menu" href="{{ url('/checkout') }}">Check Out</a>
+                    </button>
+                    @endif
             </div>
         </div>
 
@@ -82,8 +81,7 @@
                 <input type="hidden" class="dishid" name="id" value="<%= item['id'] %>">
                 <input type="hidden" class="dishdate" name="dishdate" value="<%= item['date'] %>">
                 <input type="hidden" class="dishcategory" name="dishcategory" value="<%= item['category'] %>">
-                <div class="divTableCell wdt30"><%= item['name'] %></div>
-                <div class="divTableCell wdt30"><%= item['price'] %></div>
+                <div class="divTableCell wdt60"><%= item['name'] %> - <%= item['price'] %></div>
                 <div class="divTableCell wdt10">
                     <div class="input-group">
                         <span class="input-group-btn">
@@ -99,7 +97,11 @@
                         </span>
                     </div>
                 </div>
-                <div class="divTableCell wdt20"><span class="item-price"><%= parseFloat(item['price'] * item['qty']).toFixed(2) %></span><span class="close-btn"><a href="#">x</a></span>
+                <div class="divTableCell wdt20">
+                    <span class="item-price"><%= parseFloat(item['price'] * item['qty']).toFixed(2) %></span>
+                </div>
+                <div class="divTableCell wdt10">
+                    <span class="close-btn"><a href="#">Cancel</a></span>
                 </div>
             </div>
         </div>
@@ -114,21 +116,39 @@
             $cart_items = $('.cart-items');
 
             //group the cart on date first
-            date_grouped_cart = _.groupBy(cart, 'date');
 
-            _.each(date_grouped_cart, function(dishes_on_date, date){
-                $cart_items.append('<div class="cart-date-row">' + date + '</div>');
+            date_grouped_cart = _.groupBy(cart, 'date');
+            dates_array =  _.keys(date_grouped_cart).sort();
+
+           	for (var j=0; j < dates_array.length; j++) {
+           		dishes_on_date = date_grouped_cart[dates_array[j]];
+           		date = dates_array[j];
+
+            	date_arr = date.split("/");
+				f = new Date(date_arr[1] + '/' + date_arr[0] + '/' + date_arr[2]);
+                // Div with heading for date
+                $cart_items.append('<div class="divTable border-bottom padding-10"><div class="divTableRow"><div class="divTableCell wdt20 text-left"><b>' + f.toDateString() + ' <i class="fa fa-pencil"></i></b></div></div></div>');
+
+                // Container div for the date
+                var $date_container = $('<div class="padding-10"></div');
+                $cart_items.append($date_container);
+
                 // Group by category now
                 cat_grouped_cart = _.groupBy(dishes_on_date, 'category');
 
-                _.each(cat_grouped_cart, function(dishes, category) {
-                    $cart_items.append('<div class="cart-category-row">' + category + '</div>');
+                categories = ['Breakfast', 'Lunch', 'Dinner'];
+                for (var i = 0; i < categories.length; i++) {
+                    if (cat_grouped_cart[categories[i]] == undefined)
+                        continue;
 
-                    _.each(dishes, function(item) {
-                        $cart_items.append(template({"item": item}));
-                    });
-                });
-            });
+                    $date_container.append('<div class="cart-category-row">' + categories[i] + '</div>');
+                    _.each(cat_grouped_cart[categories[i]], function(dish) {
+                        // _.each(dishes, function(item) {
+                            $date_container.append(template({"item": dish}));
+                        // });
+                    });    
+                };
+            }
 
             if (cart.length == 0) {
                 $cart_items.append('<div>No items in the cart</div>');
@@ -202,6 +222,9 @@
 
             function update_cart() {
                 cart_total = 0.0;
+                all_taxes = {{ $rates->all_taxes }};
+                carry_bag = {{ $rates->carry_bag }};
+                delivery_charge = {{ $rates->delivery_charge }};
 
                 _.each(cart, function(item) {
                     cart_total += item['price'] * item['qty'];
@@ -209,16 +232,17 @@
 
 
                 $('.cart-total').html(parseFloat(cart_total).toFixed(2));
-                $('.sub-total').html(parseFloat(cart_total).toFixed(2));
+                taxes = cart_total * all_taxes / 100;
+                sub_total = cart_total + taxes + carry_bag;
+                $('.sub-total').html(parseFloat(sub_total).toFixed(2));
 
                 if (cart_total != 0) {
-                    $('.delivery-charges').html('30.00');
-                    $('.grand-total span').html(parseFloat(cart_total + 30).toFixed(2));
+                    // $('.delivery-charges').html('30.00');
+                    $('.grand-total span').html(parseFloat(sub_total + delivery_charge).toFixed(2));
+                    $('.delivery-charges').html(parseFloat(delivery_charge).toFixed(2));
+                    $('.label-carry-bag').html(parseFloat(carry_bag).toFixed(2));
+                    $('.label-taxes').html(parseFloat(cart_total * all_taxes / 100).toFixed(2));
                 }
-                else {
-                    $('.delivery-charges').html('0.00');
-                    $('.grand-total span').html('0.00');
-                } 
 
                 $('.add-cart').html(cart.length);
             }

@@ -10,10 +10,22 @@
         <div class="collapse navbar-collapse navbar-right navbar-main-collapse">
           <ul class="nav navbar-nav" id="top-nav">
             <li class="active"> <a href="{{ url('menu' )}}">Menu</a> </li>
-            <li> <a href="how-it-works.html">How it Works</a> </li>
-            <li> <a href="about-us.html">About</a> </li>
-            <li> @if (Auth::check()) <a href="">Hi {{ Auth::user()->name }}</a> @else <a href="{{ url('login') }}">Login/Register</a> @endif </li>
-            <li class="cart-menu"> <a href="cart" class="cart-display"><span class="add-cart">0</span><img src="images/cart.png"></a> </li>
+            <li> <a href="{{ url('/pages/help') }}">How it Works</a> </li>
+            <li> <a href="{{ url('/pages/about') }}">About</a> </li>
+            @if(!Auth::check())
+            <li><a href="{{ url('login') }}">Login/Register</a></li>
+            @else
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{{ Auth::user()->name }} <span class="caret"></span></a>
+                <ul class="dropdown-menu" role="menu">
+                    <li><a href="{{ url('/profile') }}">Edit Profile</a>
+                    </li>
+                    <li><a href="{{ url('/auth/logout') }}">Logout</a>
+                    </li>
+                </ul>
+            </li>
+            @endif
+            <li class="cart-menu"> <a href="cart" class="cart-display"><span class="add-cart">0</span><img src="{{ asset('images/cart.png') }}"></a> </li>
           </ul>
         </div>
         <!-- /.navbar-collapse --> 

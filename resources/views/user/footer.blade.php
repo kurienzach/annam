@@ -5,15 +5,15 @@
           <div class="col-md-4 col-xs-12">
             <h4>About Annam</h4>
             <ul class="list-unstyled">
-              <li><a href="about-us.html">Our Story</a> </li>
-              <li><a href="careers.html">Careers</a> </li>
-              <li><a href="privacy-and-terms-of-service.html">Privacy & Terms</a> </li>
+              <li><a href="{{ url('/pages/about') }}">Our Story</a> </li>
+              <li><a href="{{ url('/pages/careers') }}">Careers</a> </li>
+              <li><a href="{{ url('/pages/terms_and_conditions') }}">Privacy & Terms</a> </li>
             </ul>
           </div>
           <div class="col-md-4 col-xs-12">
             <div class="contact">
               <h4>Help &amp; Contact</h4>
-              <i class="fa fa-life-ring"></i><a href="help.html" class="help-link help">Help Center</a> <i class="fa fa-envelope-o"></i><a href="support.html" class="help-link support">Email Support</a>
+              <i class="fa fa-life-ring"></i><a href="{{ url('/pages/help') }}" class="help-link help">Help Center</a> <i class="fa fa-envelope-o"></i><a href="{{ url('/support') }}" class="help-link support">Email Support</a>
               <p>Mon-Fri, 7AM-9PM PST</p>
               <div class="social">
                 <ul>
@@ -28,8 +28,8 @@
           <div class="col-md-4 col-xs-12">
             <h4>Order On The Go</h4>
             <ul class="list-unstyled">
-              <li><a href="help.html">Service Area</a> </li>
-              <li><a href="faqs.html">Faqs</a> </li>
+              <li><a href="{{ url('/pages/help') }}">Service Area</a> </li>
+              <li><a href="{{ url('/pages/faqs') }}">Faqs</a> </li>
             </ul>
           </div>
            <div class="col-md-4">

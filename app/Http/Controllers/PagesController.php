@@ -1,18 +1,32 @@
 <?php namespace App\Http\Controllers;
 
+use App;
 use Auth;
+use View;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Order;
 use App\OrderDish;
 use App\Location;
 use App\Dish;
+use App\Rate;
+
+use Validator;
+use Hash;
 
 use Carbon\Carbon;
 
 use Illuminate\Http\Request;
 
 class PagesController extends Controller {
+    // Static page controller function
+    public function pages($id)
+    {
+        if (View::exists('user.static.' . $id))
+            return view('user.static.' . $id);
+        else
+            App::abort(404);
+    }
     public function login(Request $request)
     {
         return view('user.login', [
@@ -95,7 +109,11 @@ class PagesController extends Controller {
     }
 
     public function cart(Request $request) {
-        return view('user.cart', ["cart" => json_encode($request->session()->get('cart', array()))]);
+        $rates = Rate::find(1);
+        return view('user.cart', [
+            "cart" => json_encode($request->session()->get('cart', array())),
+            "rates" => $rates
+        ]);
     }
 
     public function updatecart(Request $request) {
@@ -108,7 +126,37 @@ class PagesController extends Controller {
         return ($request->get('location'));
     }
 
+    public function checkout(Request $request)
+    {
+        $user = Auth::user();
+        $cart = json_encode($request->session()->get('cart', array()));
+        $rates = Rate::find(1);
+
+        $phpcart = $request->session()->get('cart', array());
+
+        if (count($phpcart) == 0) { 
+            return redirect('/menu');
+        }
+
+        return view('user.checkout', compact('user', 'cart', 'phpcart', 'rates'));
+    }
+
     public function placeorder(Request $request) {
+        //Validations
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'mobile' => 'required|numeric',
+            'address' => 'required|max:200',
+            'city' => 'required|max:50',
+            'state' => 'required|max:50',
+            'country' => 'required|max:50',
+            'pincode' => 'required|max:50',
+            'cart' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            return back()->withErrors($validator);
+        }
         // Add logic to place order here
         $user = Auth::getUser();
         $cart = json_decode($request->get('cart'));
@@ -124,12 +172,17 @@ class PagesController extends Controller {
                 $order->order_date = Carbon::createFromFormat('d/m/y', $date);
                 $order->category = $category;
                 $order->user_id = $user->id;
-                $order->mobile_no = $user->mobile;
-                $order->delivery_address = $request->session()->get('location');
+                $order->user_name = $request->get('name');
+                $order->mobile_no = $request->get('mobile');
+                $order->delivery_address = $request->get('address');
+                $order->delivery_city = $request->get('city');
+                $order->delivery_state = $request->get('state');
+                $order->delivery_country = $request->get('country');
+                $order->delivery_pincode = $request->get('pincode');
                 $order->save();
 
                 $noItems = 0;
-                $totalPrice = 30.0;
+                $totalPrice = 0.0;
 
                 foreach($cartdatecat as $item) {
                     $dish = Dish::find($item->id);
@@ -147,6 +200,7 @@ class PagesController extends Controller {
                 }
 
                 $order->no_items = $noItems;
+                // [TODO]: Any tax calculations etc. needs to be done here. Need to clarify with the customer before implementation
                 $order->total_price = $totalPrice;
                 $order->save();
             }
@@ -155,5 +209,64 @@ class PagesController extends Controller {
         $request->session()->forget('cart');
 
         return view('user.order');
+    }
+
+    public function profile(Request $request)
+    {
+        $user = Auth::user();
+        $cart = json_encode($request->session()->get('cart', array()));
+        return view('user.profile', compact('user', 'cart'));
+    }
+
+    public function save_profile(Request $request)
+    {
+        $user = Auth::user();
+
+        //Validations
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'mobile' => 'required||numeric',
+            'address' => 'required|max:200',
+            'city' => 'required|max:50',
+            'state' => 'required|max:50',
+            'country' => 'required|max:50',
+            'pincode' => 'required|max:50'
+        ]);
+
+        $request->session()->flash('msg_source', 'profile');
+
+        if ($validator->fails()) {
+            return back()->withErrors($validator);
+        }
+
+
+        $user->update($request->all());
+        return redirect('/profile')->with('profile_updated', 'true');
+    }
+
+    public function change_password(Request $request)
+    {
+        $user = Auth::user();
+        $request->session()->flash('msg_source', 'password');
+
+        // Check if old password is correct
+        if (!Hash::check($request->get('old_password'), $user->password)) {
+            return back()->withErrors(['The current password you entered is wrong']);
+        }
+
+        // Validations
+		$validator =  Validator::make($request->all(), [
+			'password' => 'required|confirmed|min:6',
+		]);
+
+        if ($validator->fails()) {
+            return back()->withErrors($validator);
+        }
+
+        // Update the password
+        $user->password = Hash::make($request->get('password'));
+        $user->save();
+
+        return redirect('/profile')->with('password_updated', 'true');
     }
 }

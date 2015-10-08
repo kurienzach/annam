@@ -22,15 +22,31 @@
                 <div class="panel-body form-horizontal">
                     <div class="form-group">
                         <label class="col-sm-4 control-label">Customer Name : </label>
-                        <p class="col-sm-8 form-control-static">{{ $order->user()->first()->name }}</p>
+                        <p class="col-sm-8 form-control-static">{{ $order->user_name }}</p>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-4 control-label">Mobile No : </label>
-                        <p class="col-sm-8 form-control-static">{{ $order->user()->first()->mobile }}</p>
+                        <p class="col-sm-8 form-control-static">{{ $order->mobile_no }}</p>
                     </div>
                     <div class="form-group">
-                        <label class="col-sm-4 control-label">Location : </label>
+                        <label class="col-sm-4 control-label">Address : </label>
                         <p class="col-sm-8 form-control-static">{{ $order->delivery_address }}</p>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">City : </label>
+                        <p class="col-sm-8 form-control-static">{{ $order->delivery_city }}</p>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">State : </label>
+                        <p class="col-sm-8 form-control-static">{{ $order->delivery_state }}</p>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">Country : </label>
+                        <p class="col-sm-8 form-control-static">{{ $order->delivery_country }}</p>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">Pincode : </label>
+                        <p class="col-sm-8 form-control-static">{{ $order->delivery_pincode }}</p>
                     </div>
                 </div>
             </div>
@@ -41,6 +57,10 @@
                     Order Details
                 </div>
                 <div class="panel-body form-horizontal">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">Devliery Date : </label>
+                        <p class="col-sm-8 form-control-static">{{ $order->order_date }}</p>
+                    </div>
                     <div class="form-group">
                         <label class="col-sm-4 control-label">Devliery Time : </label>
                         <p class="col-sm-8 form-control-static">{{ $order->category }}</p>
@@ -68,6 +88,7 @@
                                 <tr>
                                     <th>#</th>
                                     <th>Dish Name</th>
+                                    <th>Rate</th>
                                     <th>Qty</th>
                                     <th>Price</th>
                                 </tr>
@@ -78,8 +99,9 @@
                                 <tr>
                                     <td>{{ $count }}</td>        
                                     <td>{{ $dish->dish_name }}</td>        
+                                    <td>{{ $dish->dish_price }}</td>        
                                     <td>{{ $dish->dish_qty }}</td>        
-                                    <td>{{ $dish->dish_price * $dish->dish_qty }}</td>        
+                                    <td>{{ number_format($dish->dish_price * $dish->dish_qty, 2) }}</td>        
                                 </tr>
                                 <?php $count += 1; ?>
                                 @endforeach

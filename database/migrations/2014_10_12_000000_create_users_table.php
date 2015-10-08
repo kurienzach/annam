@@ -28,7 +28,6 @@ class CreateUsersTable extends Migration {
             $table->string('state', 50);
             $table->string('country', 50);
             $table->string('pincode', 10);
-            $table->boolean('activated')->default('0');
 		});
 	}
 

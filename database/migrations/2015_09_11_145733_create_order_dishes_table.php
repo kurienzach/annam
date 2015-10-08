@@ -17,7 +17,7 @@ class CreateOrderDishesTable extends Migration {
             $table->integer('order_id')->unsigned();
             $table->integer('dish_id')->unsigned();
             $table->string('dish_name');
-            $table->string('dish_price');
+            $table->decimal('dish_price', 5, 2);
             $table->string('dish_qty');
 
             $table->primary(['order_id', 'dish_id']);

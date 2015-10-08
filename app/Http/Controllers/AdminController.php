@@ -12,17 +12,108 @@ use App\Order;
 use App\User;
 use App\OrderDish;
 use App\Location;
+use App\Rate;
 
 use Carbon\Carbon;
 
 class AdminController extends Controller {
+    public function login()
+    {
+        return view('admin.login');
+    }
+
+    public function do_login(Request $request)
+    {
+        $validation = Validator::make(
+            $request->all(),
+            array(
+                'email' => 'required|email',
+                'password' => 'required'
+            )
+        );
+
+        if ($validation->fails()) {
+            $messages = $validation->messages();
+            return redirect()->back()->withErrors($messages)->withInput();
+        }
+
+        if ($request->email == "admin@annam.com" && $request->password == "Annam@123") {
+            $request->session()->put('admin', 'true');
+            return redirect('/admin/orders/today');
+        }
+        else {
+            return back()->withInput()->withErrors(['Incorrect Username / Password!!']);
+        }
+
+    }
+
+    public function logout(Request $request)
+    {
+        $request->session()->forget('admin');
+        return redirect('/admin/login');
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Dashboard  controllers
+    |--------------------------------------------------------------------------
+    */
+    public function dashboard(Request $request)
+    {
+        if (!$request->session()->has('admin')) {
+            return redirect('/admin/login');
+        }
+
+        $rates = Rate::find(1);
+        $orders = Order::all();
+
+        $total_orders = $orders->count();
+        $orders_today = $orders->filter(function($order) {
+            return Carbon::parse($order->created_at)->gte(Carbon::today());
+        })->count();
+        $deliveries_today = $orders->filter(function($order) {
+            return (Carbon::parse($order->order_date)->gte(Carbon::today())) && (Carbon::parse($order->order_date)->lt(Carbon::tomorrow()));
+        })->count();
+        $overdue_orders = $orders->filter(function($order) {
+            return (Carbon::parse($order->order_date)->lte(Carbon::today()));
+        })->count();
+
+        return view('admin.dashboard', compact('orders_today', 'total_orders', 'deliveries_today', 'overdue_orders', 'rates'));
+    }
+
+    public function update_rates(Request $request)
+    {
+        // Validations
+        $validation = Validator::make(
+            $request->all(),
+            array(
+                'carry_bag' => 'numeric',
+                'all_taxes' => 'numeric',
+                'delivery_charge' => 'numeric'
+            )
+        );
+
+        if ($validation->fails()) {
+            $messages = $validation->messages();
+            return redirect()->back()->withErrors($messages)->withInput();
+        }
+        $rate = Rate::find(1);
+
+        $rate->update($request->all());
+        return redirect('/admin');
+    }
+
     /*
     |--------------------------------------------------------------------------
     | Dishes controllers
     |--------------------------------------------------------------------------
     */
 
-    public function dishes() {
+    public function dishes(Request $request) {
+        if (!$request->session()->has('admin')) {
+            return redirect('/admin/login');
+        }
+
         $dishes = Dish::all(); 
 
         return view('admin.dishes', [
@@ -30,13 +121,21 @@ class AdminController extends Controller {
         ]);
     }
 
-    public function addDish()
+    public function addDish(Request $request)
     {
+        if (!$request->session()->has('admin')) {
+            return redirect('/admin/login');
+        }
+
         return view('admin.dish');
     }
 
-    public function editDish($id)
+    public function editDish($id, Request $request)
     {
+        if (!$request->session()->has('admin')) {
+            return redirect('/admin/login');
+        }
+
         $dish = Dish::findOrFail($id);
         return view('admin.dish', [
             'dish' => $dish 
@@ -45,6 +144,10 @@ class AdminController extends Controller {
 
     public function store(Request $request)
     {
+        if (!$request->session()->has('admin')) {
+            return redirect('/admin/login');
+        }
+
         // Check if request is for create dish or delete dish
         if (empty($request->get('id'))) {
             $validation = Validator::make(
@@ -121,8 +224,12 @@ class AdminController extends Controller {
     |--------------------------------------------------------------------------
     */
 
-    public function ordersToday()
+    public function ordersToday(Request $request)
     {
+        if (!$request->session()->has('admin')) {
+            return redirect('/admin/login');
+        }
+
         $overdue = Order::where('delivered', false)->where('order_date', '<', Carbon::now()->toDateString())->get();
         $today = Order::where('delivered', false)->where('order_date', '=', Carbon::now()->toDateString())->get();
         $tomorrow = Order::where('delivered', false)->where('order_date', '=', Carbon::now()->addDay()->toDateString())->get();
@@ -133,24 +240,36 @@ class AdminController extends Controller {
         ]);
     }
 
-    public function ordersAll()
+    public function ordersAll(Request $request)
     {
+        if (!$request->session()->has('admin')) {
+            return redirect('/admin/login');
+        }
+
         $orders = Order::where('delivered', false)->get();
         return view('admin.orders_all', [
             'orders' => $orders 
         ]);
     }
 
-    public function ordersDelivered()
+    public function ordersDelivered(Request $request)
     {
+        if (!$request->session()->has('admin')) {
+            return redirect('/admin/login');
+        }
+
         $orders = Order::where('delivered', true)->get();
         return view('admin.orders_delivered', [
             'orders' => $orders 
         ]);
     }
 
-    public function showOrder($id)
+    public function showOrder($id, Request $request)
     {
+        if (!$request->session()->has('admin')) {
+            return redirect('/admin/login');
+        }
+
         $order = Order::findOrFail($id);
         return view('admin.order', [
             'order' => $order 
@@ -162,16 +281,24 @@ class AdminController extends Controller {
     | Locations controllers
     |--------------------------------------------------------------------------
     */
-    public function locations()
+    public function locations(Request $request)
     {
+        if (!$request->session()->has('admin')) {
+            return redirect('/admin/login');
+        }
+
         $locations = Location::all();
         return view('admin.locations', [
             'locations' => $locations 
         ]);
     }
 
-    public function editLocation($id)
+    public function editLocation($id,Request $request )
     {
+        if (!$request->session()->has('admin')) {
+            return redirect('/admin/login');
+        }
+
         $location = Location::findOrFail($id);
         return view('admin.location', [
             'location' => $location 
@@ -180,6 +307,10 @@ class AdminController extends Controller {
 
     public function storeLocation(Request $request)
     {
+        if (!$request->session()->has('admin')) {
+            return redirect('/admin/login');
+        }
+
         // Validations
         $validation = Validator::make(
             $request->all(),
@@ -219,8 +350,12 @@ class AdminController extends Controller {
         return redirect(url('admin/locations'));
     }
 
-    public function addLocation()
+    public function addLocation(Request $request)
     {
+        if (!$request->session()->has('admin')) {
+            return redirect('/admin/login');
+        }
+
         return view('admin.location');
     }
 }

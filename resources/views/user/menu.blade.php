@@ -11,7 +11,7 @@
         <div class="container">
             <div class="row text-center-sm">
             <div class="col-sm-12">
-                <div class="select-category-text well text-center">Please select a time of the dish</div>
+                <div class="select-category-text well text-center">Please select a time of order to todays menu</div>
                 <div class="row dishes-holder">
                     
                 </div>

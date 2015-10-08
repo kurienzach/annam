@@ -3,7 +3,6 @@
 @section('head')
 @parent
     <link rel="stylesheet" href="css/awesomplete.css" />
-
 @stop
 
 @section('content')
