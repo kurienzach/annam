@@ -11,27 +11,26 @@
                       <div class="col-md-12">
                         <h4 class="form-title">Contact Customer Care</h4>
                         <div class="form-body">
-                          <form action="#" method="post" id="request-quote-form">
+                          <form method="post" id="request-quote-form" enctype="multipart/form-data">
+                            <input type="hidden" name="_token" value="{{ csrf_token() }}">
                             <fieldset class="row">
                             <div class="form-group col-md-6 has-icon-right">
-                              <input type="name" name="name" id="name" placeholder="Name" class="form-control">
+                              <input type="name" name="name" id="name" placeholder="Name" class="form-control" required>
                             </div>
                             <div class="form-group col-md-6 has-icon-right">
-                              <input type="email" name="email" id="email" placeholder="Email Id" class="form-control">
+                              <input type="email" name="email" id="email" placeholder="Email Id" class="form-control" required>
                             </div>
                             <div class="form-group col-md-6 has-icon-right">
                                 <label for="Issue">Specify your area:</label>
-                                <select id="support_form_category" class="form-control" name="">
-                                <option value="placing_order_issue">Koramangala</option>
-                                <option value="meal_issue">HSR</option>
-                                <option value="fulfillment_issue">Jayanagar</option>
-                                <option value="order_change">BTM</option>
-                                <option value="account_settings">Electronicity</option>
+                                <select id="location" class="form-control" name="area">
+                                @foreach($locations as $location)
+                                <option value="{{ $location->name }}">{{ $location->name }}</option>
+                                @endforeach
                                 </select>
                               </div>
                               <div class="form-group col-md-6 has-icon-right">
                                 <label for="Issue">What type of issue do you have?</label>
-                                <select id="support_form_category" class="form-control" name="">
+                                <select id="support_form_category" class="form-control" name="issue_type">
                                 <option value="placing_order_issue">Placing an order</option>
                                 <option value="meal_issue">Problem with a meal</option>
                                 <option value="fulfillment_issue">Delivery issue</option>
@@ -47,15 +46,15 @@
                                 <input type="text" name="subject" id="subject" placeholder="Subject (optional)" class="form-control">
                               </div>
                               <div class="form-group col-md-12 has-icon-right">
-                                <textarea class="form-control" name="message" placeholder="Your Message" cols="40" rows="4" id="address"></textarea>
+                                <textarea class="form-control" name="message" placeholder="Your Message" cols="40" rows="4" id="address" required></textarea>
                               </div>
                               <div class="form-group col-md-12 has-icon-right">
                             <label for="Screenshot">Attach a file or screenshot (optional)</label>
-                              <input id="support_form_file" name="support_form[file]" type="file">
+                              <input id="support_form_file" name="attatchment" type="file">
                               </div>
                             </fieldset>
                             <footer>
-                              <div class="btn btn-dark btn-fill pull-right" id="">Send Email</div>
+                              <input class="btn btn-dark btn-fill pull-right" id="" type="submit" value="Send Email">
                             </footer>
                           </form>
                         </div>
@@ -85,4 +84,13 @@
             </div>
           </div>
         </div>
+@stop
+
+@section('scripts')
+@parent
+<script>
+@if (Session::has('location'))
+    $('#location').val('{{ Session::get('location') }}');
+@endif
+</script>
 @stop

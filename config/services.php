@@ -35,4 +35,9 @@ return [
 		'secret' => '',
 	],
 
+    'facebook' => [
+        'client_id'     => '1469179833400885',
+        'client_secret' => 'b07d1ffb4072b265808f1f62ca414344',
+        'redirect'      => 'http://annamhomelyfood.com/login/callback',
+    ],
 ];

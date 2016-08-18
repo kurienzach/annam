@@ -1,5 +1,8 @@
 /vendor
 /node_modules
+/storage
 .env
 *.swp
 **.idea**
+/.idea
+.DS_Store

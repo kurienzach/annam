@@ -3,6 +3,7 @@
 use App;
 use Auth;
 use View;
+use Mail;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Order;
@@ -20,13 +21,16 @@ use Illuminate\Http\Request;
 
 class PagesController extends Controller {
     // Static page controller function
-    public function pages($id)
+    public function pages($id, Request $request)
     {
         if (View::exists('user.static.' . $id))
-            return view('user.static.' . $id);
+            return view('user.static.' . $id, [
+                "cart" => json_encode($request->session()->get('cart', array())),
+            ]);
         else
             App::abort(404);
     }
+
     public function login(Request $request)
     {
         return view('user.login', [
@@ -268,5 +272,57 @@ class PagesController extends Controller {
         $user->save();
 
         return redirect('/profile')->with('password_updated', 'true');
+    }
+
+    public function support(Request $request)
+    {
+        $locations = Location::all();
+        return view('user.support', [
+            "cart" => json_encode($request->session()->get('cart', array())),
+            "locations" => $locations
+        ]);
+    }
+
+    public function support_mail(Request $request)
+    {
+        //return $request->all();
+        
+        //return view('emails.support', $request->all());
+        $name = $request->get('name');
+        $email = $request->get('email');
+        $area = $request->get('area');
+        $issue_type = $request->get('issue_type');
+        $subject = $request->get('subject');
+        $msg = $request->get('message');
+
+        //dd($name, $email, $area, $issue_type, $subject, $message);
+
+        Mail::send('emails.support', compact('name', 'email', 'area', 'issue_type', 'subject', 'msg'), function($m) use ($request) {
+            $m->to('kurienzach@gmail.com', 'Kurien Zacharia');
+            $m->subject('New User Support Issue from ' . $request->get('email'));
+            if ($request->hasFile('attatchment')) {
+                $message->attach($request->file('resume')->getRealPath(), array(
+                    'as' => 'resume.' . $request->file('resume')->getClientOriginalExtension(), 
+                    'mime' => $request->file('resume')->getMimeType())
+                );   
+            }
+        }); 
+    
+        return redirect('/');
+    }
+
+    //this function will redirect users to facebook login page
+    public function facebook()
+    {
+        return \Socialize::with('facebook')->redirect();
+    }
+
+    public function fb_callback()
+    {
+        $user = \Socialize::with('facebook')->user();
+
+        //now we have user details in the $user array
+        dd($user);
+
     }
 }

@@ -23,9 +23,16 @@ Route::get('/pages/{id}', 'PagesController@pages');
 
 Route::get('/login', 'PagesController@login');
 Route::post('/login', 'PagesController@authuser');
+
+
+Route::get('/login/facebook', 'PagesController@facebook');
+Route::get('/login/callback', 'PagesController@fb_callback');
+
 Route::post('/menu', 'PagesController@postMenu');
 Route::get('/menu', 'PagesController@menu');
 Route::get('/cart', 'PagesController@cart');
+Route::get('/support', 'PagesController@support');
+Route::post('/support', 'PagesController@support_mail');
 
 Route::put('/updatecart', 'PagesController@updatecart');
 Route::put('/updatelocation', 'PagesController@updatelocation');

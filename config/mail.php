@@ -54,7 +54,7 @@ return [
 	|
 	*/
 
-	'from' => ['address' => null, 'name' => null],
+	'from' => ['address' => 'kurien@banded.co', 'name' => 'Annam Homely Food'],
 
 	/*
 	|--------------------------------------------------------------------------
